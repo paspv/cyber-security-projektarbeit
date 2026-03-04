@@ -54,26 +54,42 @@ cyber-security-projektarbeit/
 
 ## Die Ausführung
 
+### Lab-Environment 
+
+Um die Ansible-Skripte zu testen, habe ich mit VirtualBox eine Debian 13 VM erstellt und diese mit einem Bridge-Adapter in meinem LAN verfügbar gemacht. Damit kann ich meinen alten PC simulieren, auf dem die Services dann laufen werden.
+
+Hier musste ich als erstes SSH installieren und dem `vboxuser` erlabuen, Befehle mit `sudo` auszuführen.
+
 ### Ansible
 
 Ansible habe ich via WSL auf meinem Windows-PC installiert. 
-Damit Ansible Zugriff auf meine Lab-Umgebung / VM erhält, habe ich folgende Konfiguration erstellt:
+Damit Ansible Zugriff auf das Lab-Environment erhält und die Skripts ausführen kann, habe ich folgende Konfiguration erstellt:
 
-#### inventories/lab.yml
-```
-all:
-  hosts:
-    debian_vm:
-      ansible_host: 192.168.0.49
-      ansible_user: vboxuser
-      ansible_become: true
-      ansible_become_method: sudo
-      ansible_python_interpreter: /usr/bin/python3.13
+> [inventories/lab.yml](ansible/inventories/lab.yml)
+
+Eine fast identische Konfiguration wird auch für den Home-Server erstellt:
+
+> [inventories/production.yml](ansible/inventories/production.yml)
+
+Da die Maschine aktuell noch nicht eingerichtet ist, sind hier vorerst nur Platzhalter eingefügt.
+
+Anschliessend habe ich die Skripts zur Installation von Docker erstellt. 
+
+```sh
+cd cyber-security-projektarbeit/ansible
+ansible-galaxy init roles/docker`
 ```
 
-Somit kann sich Ansible via SSH mit dem System verbinden und die nötigen Skripts für die Nächsten Schritte.
+Interessanterweise musste ich docker zuerst manuell einmal installieren, bevor das Skript funktioniert hat.. muss das nochmals überprüfen.
+
+Ansible-Skripte ausführen: 
+``` sh
+ansible-playbook -i inventories/lab.yml site.yml
+```
 
 ### Firewall
+
+
 
 ### Pi-hole
 

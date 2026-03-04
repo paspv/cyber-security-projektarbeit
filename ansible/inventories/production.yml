@@ -1,0 +1,9 @@
+# todo: set ip and user once those are known
+all:
+  hosts:
+    home_server:
+      ansible_host: HOME_SERVER_IP
+      ansible_user: HOME_SERVER_USER
+      ansible_become: true
+      ansible_become_method: sudo
+      ansible_python_interpreter: /usr/bin/python3.13

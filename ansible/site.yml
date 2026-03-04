@@ -1,0 +1,7 @@
+---
+- name: Lab infrastructure setup
+  hosts: lab
+
+  roles:
+    - base
+    - docker

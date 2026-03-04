@@ -1,0 +1,56 @@
+---
+# Remove old Docker packages (if any)
+- name: Remove old docker packages
+  apt:
+    name:
+      - docker
+      - docker-engine
+      - docker.io
+      - containerd
+      - runc
+    state: absent
+    purge: yes
+    autoremove: yes
+
+# Install prerequisites
+- name: Install prerequisites
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+    state: present
+    update_cache: yes
+
+# Install Docker from Debian packages
+- name: Install Docker and container tools
+  apt:
+    name:
+      - docker.io
+      - containerd
+      - docker-compose
+    state: present
+    update_cache: yes
+
+# Enable and start Docker service
+- name: Ensure docker service is enabled and running
+  systemd:
+    name: docker.service
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+# Add user to docker group so they can run docker without sudo
+- name: Add user to docker group
+  user:
+    name: "{{ docker_user }}"
+    groups: docker
+    append: yes
+
+# Optional verification task to fail if Docker is not active
+- name: Verify docker daemon is running
+  command: systemctl is-active docker
+  register: docker_status
+  failed_when: docker_status.stdout != "active"
