@@ -56,7 +56,7 @@ cyber-security-projektarbeit/
 
 ### Lab-Environment 
 
-Um die Ansible-Skripte zu testen, habe ich mit VirtualBox eine Debian 13 VM erstellt und diese mit einem Bridge-Adapter in meinem LAN verfügbar gemacht. Damit kann ich meinen alten PC simulieren, auf dem die Services dann laufen werden.
+Um die Ansible-Skripte zu testen, habe ich mit VirtualBox eine Ubuntu 24.04.4 LTS  VM erstellt und diese mit einem Bridge-Adapter in meinem LAN verfügbar gemacht. Damit kann ich meinen alten PC simulieren, auf dem die Services dann laufen werden.
 
 Hier musste ich als erstes SSH installieren und dem `vboxuser` erlabuen, Befehle mit `sudo` auszuführen.
 
@@ -73,19 +73,20 @@ Eine fast identische Konfiguration wird auch für den Home-Server erstellt:
 
 Da die Maschine aktuell noch nicht eingerichtet ist, sind hier vorerst nur Platzhalter eingefügt.
 
-Anschliessend habe ich die Skripts zur Installation von Docker erstellt. 
+Anschliessend habe ich von Ansible die Ordner- und Filestruktur generieren lassen:
 
 ```sh
 cd cyber-security-projektarbeit/ansible
 ansible-galaxy init roles/docker`
 ```
 
-Interessanterweise musste ich docker zuerst manuell einmal installieren, bevor das Skript funktioniert hat.. muss das nochmals überprüfen.
+Für die Erstellung des Docker-Skripts bin ich einem [Tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04) von DigitalOcean gefolgt.
 
-Ansible-Skripte ausführen: 
+Ansible-Skripte ausführen (für Testdurchläufe kann `--check` angefügt werden): 
 ``` sh
-ansible-playbook -i inventories/lab.yml site.yml
+ansible-playbook -i inventories/lab.yml lab-playbook.yml -K
 ```
+
 
 ### Firewall
 

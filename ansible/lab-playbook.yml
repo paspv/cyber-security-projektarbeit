@@ -1,7 +1,7 @@
 ---
 - name: Lab infrastructure setup
   hosts: lab
+  become: true
 
   roles:
-    - base
     - docker

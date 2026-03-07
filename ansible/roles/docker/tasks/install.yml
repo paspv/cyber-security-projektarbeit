@@ -1,56 +1,38 @@
----
-# Remove old Docker packages (if any)
-- name: Remove old docker packages
+- name: Install aptitude
   apt:
-    name:
-      - docker
-      - docker-engine
-      - docker.io
-      - containerd
-      - runc
-    state: absent
-    purge: yes
-    autoremove: yes
+    name: aptitude
+    state: latest
+    update_cache: true
 
-# Install prerequisites
-- name: Install prerequisites
+- name: Install required system packages
   apt:
-    name:
+    pkg:
       - apt-transport-https
       - ca-certificates
       - curl
-      - gnupg
-      - lsb-release
-    state: present
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: latest
     update_cache: yes
 
-# Install Docker from Debian packages
-- name: Install Docker and container tools
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable
+    state: present
+
+- name: Update apt and install docker-ce
   apt:
-    name:
-      - docker.io
-      - containerd
-      - docker-compose
-    state: present
+    name: docker-ce
+    state: latest
     update_cache: yes
 
-# Enable and start Docker service
-- name: Ensure docker service is enabled and running
-  systemd:
-    name: docker.service
-    enabled: yes
-    state: started
-    daemon_reload: yes
-
-# Add user to docker group so they can run docker without sudo
-- name: Add user to docker group
-  user:
-    name: "{{ docker_user }}"
-    groups: docker
-    append: yes
-
-# Optional verification task to fail if Docker is not active
-- name: Verify docker daemon is running
-  command: systemctl is-active docker
-  register: docker_status
-  failed_when: docker_status.stdout != "active"
+- name: Install Docker Module for Python
+  pip:
+    name: docker
