@@ -80,12 +80,30 @@ cd cyber-security-projektarbeit/ansible
 ansible-galaxy init roles/docker`
 ```
 
-Für die Erstellung des Docker-Skripts bin ich einem [Tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04) von DigitalOcean gefolgt.
+Für die Erstellung des Docker-Skripts bin ich einem [Tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04) von DigitalOcean gefolgt. Leider bin ich dabei auf einen Fehler gestossen, den ich auch mit ChatGPT und Gemini nicht gelösst bekommen habe: 
+
+```
+TASK [docker : Install Docker CE and required plugins] ************************************************************************************************************************************************************
+[ERROR]: Task failed: Module failed: No package matching 'docker-ce' is available
+Origin: /home/ddev/automation/cyber-security-projektarbeit/ansible/roles/docker/tasks/install.yml:41:3
+
+39     filename: docker
+40
+41 - name: Install Docker CE and required plugins
+     ^ column 3
+
+fatal: [lab]: FAILED! => {"changed": false, "msg": "No package matching 'docker-ce' is available"}
+```
+
+Da Docker eigentlich nicht Teil der Technologien ist, um die es in dieser Arbeit gehen sollte, habe ich nach mehreren Stunden herumprobieren entschieden, diesen Schritt manuell durchzuführen.
+
 
 Ansible-Skripte ausführen (für Testdurchläufe kann `--check` angefügt werden): 
 ``` sh
 ansible-playbook -i inventories/lab.yml lab-playbook.yml -K
 ```
+
+
 
 
 ### Firewall
