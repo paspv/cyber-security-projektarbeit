@@ -24,6 +24,7 @@ Geplant ist die Installation und Konfiguration folgender Dienste:
 
 Da ich über keinerlei Erfahrungen mit dem Einrichten dieser Dienste und dem Konzept von Infrastructure as Code habe, habe ich mir zur groben Planung des Projekts ChatGPT zu Hilfe gezogen. 
 
+Ursprünglich war folgende Projektstruktur geplant:
 
 ```
 cyber-security-projektarbeit/
@@ -50,15 +51,17 @@ cyber-security-projektarbeit/
 └── README.md/
 ```
 
+Die Automatisierung soll mit Ansible, einer open-source Technologie zur Automatisierung von IT Tasks, durchgeführt werden. ChatGPT hat mir diese Technologie vorgeschlagen, denn damit kann man die Scripts von einem Host aus via SSH automatisch auf den Zielservern ausführen lassen. Leider hat das nicht ganz so gut geklappt wie ich mir das vorgestellt habe, doch dazu in der Ausführung mehr.
 
+### Testumgebung
+
+Wie einigen in der File-Struktur vielleicht bereits aufgefallen ist, sind zwei Environments geplant - `lab` und `production`. Ersteres soll eine VM sein, welche ich auf meinem PC betreibe, während `production` mein Home-Server / alter PC sein wird. Dies vor allem aus dem Grund, dass ich den Home-Server mangels Anschlüsse nicht in meinem Büro betreiben kann. Zudem lässt sich eine VM auch einfacher wiederherstellen, wenn etwas nicht ganz klappen sollte.
 
 ## Die Ausführung
 
 ### Lab-Environment 
 
-Um die Ansible-Skripte zu testen, habe ich mit VirtualBox eine Ubuntu 24.04.4 LTS  VM erstellt und diese mit einem Bridge-Adapter in meinem LAN verfügbar gemacht. Damit kann ich meinen alten PC simulieren, auf dem die Services dann laufen werden.
-
-Hier musste ich als erstes SSH installieren und dem `vboxuser` erlabuen, Befehle mit `sudo` auszuführen.
+Um die Ansible-Skripts zu testen, habe ich mit VirtualBox eine Ubuntu 24.04.4 LTS VM erstellt und diese mit einem Bridge-Adapter in meinem LAN verfügbar gemacht. Um mich mit der VM verbinden zu können, musste hier als erstes SSH installiert werden.
 
 ### Ansible
 
