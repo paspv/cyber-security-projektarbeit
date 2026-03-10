@@ -115,4 +115,8 @@ ansible-playbook -i inventories/lab.yml lab-playbook.yml -K
 
 ### Pi-hole
 
+Pi-hole installation via https://github.com/pi-hole/docker-pi-hole
+
+Musste den DNSStubListener deaktivieren, um den Pihole Container an port 53 binden zu lassen.
+
 ### VPN

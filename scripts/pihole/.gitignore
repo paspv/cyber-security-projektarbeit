@@ -1,0 +1,5 @@
+# Config / Secrets
+.env
+
+# Pihole volume
+etc-pihole

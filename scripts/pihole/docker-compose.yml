@@ -1,0 +1,28 @@
+# More info at https://github.com/pi-hole/docker-pi-hole/ and https://docs.pi-hole.net/
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:2026.02.0
+    ports:
+      # DNS Ports
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "8080:80/tcp"
+
+    environment:
+      # Set the appropriate timezone for your location (https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g:
+      TZ: ${PIHOLE_TIME_ZONE}
+      # Set a password to access the web interface. Not setting one will result in a random password being assigned
+      FTLCONF_webserver_api_password: ${PIHOLE_PASSWORD}
+      # If using Docker's default `bridge` network setting the dns listening mode should be set to 'ALL'
+      FTLCONF_dns_listeningMode: 'ALL'
+      FTLCONF_dns_upstreams: ${PIHOLE_DNS_UPSTREAM}
+
+    # Volumes store your data between container upgrades    
+    volumes:
+      # For persisting Pi-hole's databases and common configuration file
+      - '${HOME}/services/pihole-data:/etc/pihole'
+    cap_add:
+      - NET_ADMIN
+
+    restart: unless-stopped
