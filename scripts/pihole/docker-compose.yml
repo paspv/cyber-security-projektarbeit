@@ -3,6 +3,9 @@ services:
   pihole:
     container_name: pihole
     image: pihole/pihole:2026.02.0
+    networks:
+      network-services: 
+        ipv4_address: ${PIHOLE_INTERNAL_IP}
     ports:
       # DNS Ports
       - "53:53/tcp"
@@ -21,8 +24,14 @@ services:
     # Volumes store your data between container upgrades    
     volumes:
       # For persisting Pi-hole's databases and common configuration file
-      - '${HOME}/services/pihole-data:/etc/pihole'
+      - '${HOME}/services/pihole/data:/etc/pihole'
+      - '${HOME}/services/pihole/dnsmasq.d:/etc/dnsmasq.d'
+      - '${HOME}/services/pihole/logs:/var/log'
     cap_add:
       - NET_ADMIN
 
     restart: unless-stopped
+
+networks:
+  network-services:
+    external: true 

@@ -111,14 +111,18 @@ ansible-playbook -i inventories/lab.yml lab-playbook.yml -K
 
 Pi-hole installation via https://github.com/pi-hole/docker-pi-hole
 
-Musste den DNSStubListener deaktivieren, um den Pihole Container an port 53 binden zu lassen.
+Musste den DNSStubListener deaktivieren, um den Pi-hole Container an port 53 binden zu lassen.
 
 ![Pi-hole Dashboard is running](assets/images/pihole-dashboard.png)
 
+
+### VPN
+
+Als VPN installiere ich Wireguard. Damit Wireguard dann auch mit dem Pi-hole zusammen funktioniert, musste ich im Docker-Installationsskript ein geteiltes Netzwerk erstellen, an welches sich beide Container anschliessen können. Bei der Erstellung der docker-compose Datei für Wireguard habe ich mich von Gemini unterstützen lassen. Dazu gab ich der KI eine grobe Beschreibung der bisherigen Konfigurationen und die Pi-hole docker-compose Datei als Kontext.
+
+![Pi-hole dashboard showing traffic from phone connected via Wireguard](assets/images/pihole-dashboard-wireguard.png)
 
 ### Firewall
 
 
 
-
-### VPN

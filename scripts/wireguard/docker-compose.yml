@@ -1,0 +1,31 @@
+services:
+  wireguard:
+    container_name: wireguard
+    image: linuxserver/wireguard:amd64-1.0.20250521
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${WIREGUARD_TIME_ZONE}
+      - SERVERURL=192.168.0.52
+      - SERVERPORT=51820
+      - PEERS=${WIREGUARD_NUMBER_OF_PEERS} # Number of client configs to generate
+      - PEERDNS=${PIHOLE_INTERNAL_IP}
+      - ALLOWEDIPS=0.0.0.0/0
+    volumes:
+      - '${HOME}/services/wireguard/config:/config'
+      - '/lib/modules:/lib/modules'
+    ports:
+      - "51820:51820/udp"
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    networks:
+      network-services:
+        ipv4_address: 172.20.0.3
+    restart: unless-stopped
+
+networks:
+  network-services:
+    external: true

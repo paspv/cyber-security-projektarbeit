@@ -29,3 +29,5 @@ sudo apt update
 
 echo "--> Install latest docker version"
 sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+sudo docker network create network-services --subnet=172.20.0.0/24 || true
