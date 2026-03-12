@@ -126,3 +126,7 @@ Als VPN installiere ich Wireguard. Damit Wireguard dann auch mit dem Pi-hole zus
 
 
 
+## Resultat
+
+Um dieses Setup jetzt effektiv einsetzen zu können, müsste ich lediglich mein Ubuntu-Image auf meinem Home-Server installieren, die Skripte laufen lassen und im Router meines LAN den DNS Server auf die IP-Adresse des Home-Servers umstellen. Leider konnte ich das bisher aber noch nicht testen.
+

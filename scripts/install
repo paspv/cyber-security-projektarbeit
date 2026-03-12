@@ -13,11 +13,13 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
 
     echo "Starting server setup"
-    
+  
     (cd ./docker && ./install)
 
     (cd ./pihole && ./install)
 
     (cd ./wireguard && ./install)
+
+    (cd ./firewall && ./install)
 
 fi
