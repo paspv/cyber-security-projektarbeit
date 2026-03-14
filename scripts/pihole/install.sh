@@ -16,6 +16,7 @@ if grep -q "DNSStubListener=" /etc/systemd/resolved.conf; then
 else
     echo "DNSStubListener=no" >> /etc/systemd/resolved.conf
 fi
+
 # Restart systemd-resolved to apply changes
 systemctl restart systemd-resolved
 

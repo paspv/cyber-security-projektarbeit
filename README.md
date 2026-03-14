@@ -4,10 +4,17 @@ Projektarbeit im Rahmen des Fachs "Cyber Security" im "Informatiker HF"-Lehrgang
 
 ## Inhalt
 - [Der Plan](#der-plan)
+    - [Testumgebung](#testumgebung)
+    - [Zukünftige Pläne](#zukünftige-pläne)
+
 - [Die Ausführung](#die-ausführung)
+    - [Lab Environment](#lab-environment)
+    - [Ansible](#ansible)
     - [Firewall](#firewall)
     - [Pi-hole](#pi-hole)
     - [VPN](#vpn)
+- [Das Resultat](#das-resultat)
+    - [Erweiterungspläne](#erweiterungspläne)
 
 
 ## Der Plan
@@ -140,27 +147,28 @@ In den `.env` Files habe ich einige Konfigurationen ausgelagert, die je nach Anw
 
 ### Pi-hole
 
-Um das Pi-hole zu installieren, habe ich mich an die Anleitung unter https://github.com/pi-hole/docker-pi-hole gehalten. Das lief ziemlich reibungslos, ich musste lediglich noch den DNSStubListener von Ubuntu deaktivieren, um den Pi-hole Container an Port 53 zu zu lassen.
-
-![Pi-hole Dashboard is running](assets/images/pihole-dashboard.png)
-
+Um das Pi-hole zu installieren, habe ich mich an die Anleitung unter https://github.com/pi-hole/docker-pi-hole gehalten. Das lief ziemlich reibungslos, ich musste lediglich noch den DNSStubListener von Ubuntu deaktivieren, um den Pi-hole Container an Port 53 verbinden zu lassen.
 
 ### VPN
 
-Als VPN installierte ich Wireguard. Damit Wireguard dann auch mit dem Pi-hole zusammen funktioniert, musste ich im Docker-Installationsskript ein geteiltes Netzwerk erstellen, an welches sich beide Container anschliessen können. Bei der Erstellung der docker-compose Datei für Wireguard habe ich mich von Gemini unterstützen lassen. Dazu gab ich der KI eine grobe Beschreibung der bisherigen Konfigurationen und die Pi-hole docker-compose Datei als Kontext.
+Als VPN installierte ich Wireguard. Bei der Erstellung der `docker-compose` Datei für Wireguard habe ich mich von Gemini unterstützen lassen. Dazu gab ich der KI eine grobe Beschreibung der bisherigen Konfigurationen und die Pi-hole `docker-compose` Datei als Kontext.
+
+Für einen Test habe ich mein Handy (welches mit dem WLAN verbunden war) via Wireguard-App auf meine VM umgeleitet und siehe da - Pi-hole registrierte meinen Traffic: 
 
 ![Pi-hole dashboard showing traffic from phone connected via Wireguard](assets/images/pihole-dashboard-wireguard.png)
 
 ### Firewall
 
+Als Firewall habe ich das Paket `ufw` (Uncomplicated Firewall) verwendet. Für die Installation und Konfiguration habe ich mir auch wieder Unterstützung in Form von Gemini geholt. In der Standardkonfiguration umgeht Docker jedoch die Firewall, weshalb ich ein zusätzliches [Paket](https://github.com/chaifeng/ufw-docker/raw/master/ufw-docker) installieren musste, welches das verhindern sollte. Zudem habe ich die Firewall so konfiguriert, dass das Admin-Interface von Pi-hole nur via Wireguard erreichbar sein sollte. 
 
+## Das Resultat
 
-## Resultat
+Ich habe Skripte für ein funktionstüchtiges Home-Server Setup erstellt. Da ich mich mit dem Thema nicht so gut auskenne, werde ich aber vor dem "produktiven" Einsatz nochmals alles Skripte und Konfigurationen überprüfen. 
 
-Um dieses Setup jetzt effektiv einsetzen zu können, müsste ich lediglich mein Ubuntu-Image auf meinem Home-Server installieren, die Skripte laufen lassen und im Router meines LAN den DNS Server auf die IP-Adresse des Home-Servers umstellen. Leider konnte ich das bisher aber noch nicht testen.
+Wenn ich dieses Setup jetzt aufsetzen möchte, müsste ich lediglich mein Ubuntu-Image auf meinem Home-Server installieren, die Skripte laufen lassen und im Router meines LAN den DNS Server auf die IP-Adresse des Home-Servers umstellen. Bisher habe ich aber nur den letzten Teil getesten: das Umleiten des LAN-Traffics über meine VM. Auch das hat gut Funktioniert.
 
+### Erweiterungspläne
 
+Während der Semesterferien plane ich die Erweiterung des Setups um einen Reverse-Proxy, damit ich meine Services und zukünftige Webprojekte via eine leserliche URL erreichen kann.
 
-## Weitere Pläne
-
-Während der Semesterferien plane ich die Erweiterung des Setups um einen reverse-proxy, damit ich meine Services/Webprojekte via eine leserliche URL erreichen. 
+Zudem werde ich das Setup noch um Fail2Ban erweitern.
