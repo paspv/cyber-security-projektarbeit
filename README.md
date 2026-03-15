@@ -95,7 +95,7 @@ ansible-galaxy init roles/docker`
 
 Für den eigentlichen Code bin ich einem [Tutorial](https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-docker-on-ubuntu-22-04) von DigitalOcean gefolgt. Zu beginn lief es eigentlich ziemlich gut, jedoch tauchte dann plötzlich eine Fehlermeldung auf:
 
-```
+```sh
 TASK [docker : Install Docker CE and required plugins] ************************************************************************************************************************************************************
 [ERROR]: Task failed: Module failed: No package matching 'docker-ce' is available
 Origin: /home/ddev/automation/cyber-security-projektarbeit/ansible/roles/docker/tasks/install.yml:41:3
@@ -143,7 +143,7 @@ Das `scripts/install.sh` Skript führt nacheinander die `install.sh` Skripts aus
 
 Diese Struktur erlaubt es mir auch, die einzelnen Services separat von einander zu testen oder nur einzelne neu zu deployen. Damit die Docker-Container trotz separiertem `docker-compose.yml` zusammen kommunizieren konnten, musste ich jedoch das interne Netzwerk schon im `docker/install.sh` Skript erstellen und nicht wie sonst üblich im `docker-compose.yml` definieren.
 
-In den `.env` Files habe ich einige Konfigurationen ausgelagert, die je nach Anwender und Anwendungsfall angepasst werden müssen.
+In den `.env` Files habe ich einige Konfigurationen ausgelagert, die je nach Anwender und Anwendungsfall angepasst werden müssen. Damit keine Credentials ins Internet gelangen, habe ich diese Dateien via Gitignore aus dem Repository ausgeschlossen und stattdessen `.env.template`-Files commited, welche zur Erstellung der `.env`-Files kopiert und abgeändert werden können.
 
 ### Pi-hole
 
@@ -156,6 +156,12 @@ Als VPN installierte ich Wireguard. Bei der Erstellung der `docker-compose` Date
 Für einen Test habe ich mein Handy (welches mit dem WLAN verbunden war) via Wireguard-App auf meine VM umgeleitet und siehe da - Pi-hole registrierte meinen Traffic: 
 
 ![Pi-hole dashboard showing traffic from phone connected via Wireguard](assets/images/pihole-dashboard-wireguard.png)
+
+Wireguard benötigt eine eigene Konfiguration pro Gerät. Aus dem Grund gibt es im `.env` den Wert `WIREGUARD_NUMBER_OF_PEERS`, welcher die gewünschte Anzahl an Peers anlegt. Mit folgendem Befehl lässt sich dann ein QR-Code generieren, welcher mit der Wireguard-App gescannt werden kann, um die Verbindung einzurichten:
+
+```docker exec -it wireguard /app/show-peer 1```
+
+Dabei einfach die 1 mit der Nummer des entsprechenden Peers  ersetzen, damit der QR-Code mit den richtigen Daten generiert werden kann.
 
 ### Firewall
 
@@ -171,4 +177,4 @@ Wenn ich dieses Setup jetzt aufsetzen möchte, müsste ich lediglich mein Ubuntu
 
 Während der Semesterferien plane ich die Erweiterung des Setups um einen Reverse-Proxy, damit ich meine Services und zukünftige Webprojekte via eine leserliche URL erreichen kann.
 
-Zudem werde ich das Setup noch um Fail2Ban erweitern.
+Ich habe mir überlegt auch noch Fail2Ban einzurichten, jedoch habe ich das für den Moment sein lassen, da Wireguard nur Verbindungen mit Zertifikaten zulässt und es deshalb keine Passwörter gibt, welche Brute-Forced werden könnten um Zugang zum System zu bekommen. Sollte ich aber zukünftig noch andere Ports gegen aussen öffnen wollen als der für Wireguard, so werde ich Fail2Ban noch installieren.
